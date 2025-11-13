@@ -1,0 +1,35 @@
+{
+  "name": "md2pdf",
+  "version": "1.0.0",
+  "description": "Professional Markdown to PDF converter with WYSIWYG rendering",
+  "main": "dist/index.js",
+  "bin": {
+    "md2pdf": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "test": "node dist/index.js example.md"
+  },
+  "keywords": [
+    "markdown",
+    "pdf",
+    "converter",
+    "puppeteer",
+    "cli"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.1.0",
+    "highlight.js": "^11.9.0",
+    "marked": "^11.1.0",
+    "marked-highlight": "^2.1.0",
+    "puppeteer": "^24.15.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "typescript": "^5.3.3"
+  }
+}

@@ -1,0 +1,198 @@
+/**
+ * Example Custom CSS Theme - Dark Mode
+ * 
+ * This is an example of how to create a custom CSS theme.
+ * Use it with: md2pdf document.md --css custom-theme-example.css
+ * 
+ * You can customize:
+ * - Colors and backgrounds
+ * - Font families and sizes
+ * - Spacing and margins
+ * - Code block styling
+ * - Table appearance
+ */
+
+/* ============================================================================
+   CUSTOM COLOR SCHEME
+   ============================================================================ */
+
+:root {
+  --primary-color: #e74c3c;
+  --secondary-color: #3498db;
+  --text-color: #2c3e50;
+  --bg-color: #ffffff;
+  --code-bg: #2d2d2d;
+  --code-color: #f8f8f2;
+}
+
+/* ============================================================================
+   OVERRIDE BASE TYPOGRAPHY
+   ============================================================================ */
+
+body {
+  /* Use a different font family */
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 12pt;
+  color: var(--text-color);
+}
+
+/* ============================================================================
+   CUSTOM HEADING STYLES
+   ============================================================================ */
+
+h1 {
+  color: var(--primary-color);
+  border-bottom: 3px solid var(--primary-color);
+  padding-bottom: 0.5em;
+}
+
+h2 {
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--secondary-color);
+}
+
+h3 {
+  color: var(--secondary-color);
+}
+
+/* ============================================================================
+   CUSTOM CODE BLOCK STYLING (DARK THEME)
+   ============================================================================ */
+
+pre {
+  background: var(--code-bg);
+  color: var(--code-color);
+  border-left: 4px solid var(--primary-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+code {
+  background: #f5f5f5;
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+/* ============================================================================
+   CUSTOM TABLE STYLING
+   ============================================================================ */
+
+table {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+th {
+  background: var(--primary-color);
+  color: white;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  letter-spacing: 0.5px;
+}
+
+tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+tr:hover {
+  background: #f0f0f0;
+}
+
+/* ============================================================================
+   CUSTOM BLOCKQUOTE STYLING
+   ============================================================================ */
+
+blockquote {
+  border-left: 5px solid var(--secondary-color);
+  background: linear-gradient(to right, #e8f4f8, transparent);
+  padding: 1em 1.5em;
+  font-style: normal;
+  color: var(--text-color);
+}
+
+blockquote::before {
+  content: '"';
+  font-size: 3em;
+  color: var(--secondary-color);
+  opacity: 0.3;
+  line-height: 0;
+  display: block;
+  margin-bottom: -0.3em;
+}
+
+/* ============================================================================
+   CUSTOM LINK STYLING
+   ============================================================================ */
+
+a {
+  color: var(--secondary-color);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--secondary-color);
+}
+
+a:hover {
+  text-decoration-style: solid;
+}
+
+/* ============================================================================
+   CUSTOM IMAGE STYLING
+   ============================================================================ */
+
+img {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+figure {
+  background: #f9f9f9;
+  padding: 1em;
+  border-radius: 8px;
+}
+
+figcaption {
+  font-family: 'Arial', sans-serif;
+  font-size: 0.85em;
+  color: #666;
+  margin-top: 0.8em;
+}
+
+/* ============================================================================
+   CUSTOM UTILITY CLASSES
+   ============================================================================ */
+
+/* Highlight box */
+.highlight {
+  background: #fff3cd;
+  border-left: 4px solid #ffc107;
+  padding: 1em;
+  margin: 1em 0;
+}
+
+/* Warning box */
+.warning {
+  background: #f8d7da;
+  border-left: 4px solid #dc3545;
+  padding: 1em;
+  margin: 1em 0;
+  color: #721c24;
+}
+
+/* Info box */
+.info {
+  background: #d1ecf1;
+  border-left: 4px solid #17a2b8;
+  padding: 1em;
+  margin: 1em 0;
+  color: #0c5460;
+}
+
+/* Success box */
+.success {
+  background: #d4edda;
+  border-left: 4px solid #28a745;
+  padding: 1em;
+  margin: 1em 0;
+  color: #155724;
+}

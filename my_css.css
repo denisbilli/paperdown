@@ -1,0 +1,226 @@
+/* ====== BASE TYPOGRAPHY ====== */
+:root {
+  --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Fira Code", Consolas, Monaco, monospace;
+  --color-text: #111;
+  --color-muted: #555;
+  --color-accent: #0b3d91;
+  --color-border: #dcdcdc;
+  --bg-code: #f8f8f8;
+  --margin-top: 0mm;
+  --margin-bottom: 0mm;
+  --margin-side: 0mm;
+  --header-h: 14mm;
+  --footer-h: 14mm;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 11.5pt;
+  line-height: 1.55;
+  color: var(--color-text);
+  margin: var(--margin-top) var(--margin-side) var(--margin-bottom) var(--margin-side);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ====== HEADER / FOOTER ====== */
+.header, .footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: 9pt;
+  background: white;
+  z-index: 10;
+}
+
+.header {
+  top: 0;
+  height: var(--header-h);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 3mm;
+}
+
+.footer {
+  bottom: 0;
+  height: var(--footer-h);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 3mm;
+}
+
+/* Puppeteer sostituirà {{pageNumber}} e {{totalPages}} */
+.footer .pageNumber::before { content: attr(data-page-number); }
+.footer .totalPages::before { content: attr(data-total-pages); }
+
+/* ====== HEADINGS ====== */
+h1, h2, h3, h4 {
+  color: var(--color-text);
+  line-height: 1.3;
+  margin: 1.2rem 0 0.6rem;
+  page-break-after: avoid;
+}
+h1 {
+  font-size: 20pt;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-accent);
+  padding-bottom: 6px;
+}
+h2 { font-size: 16pt; margin-top: 1.4rem; color: #2f3b4a; }
+h3 { font-size: 13pt; color: #3b4b5a; }
+h4 { font-size: 11pt; color: #444; }
+
+/* ====== PARAGRAPHS / LISTS / QUOTES ====== */
+p { margin: 0.6rem 0; orphans:3; widows:3; }
+ul, ol { margin: 0.5rem 0 0.8rem 1.2rem; }
+blockquote {
+  border-left: 3px solid var(--color-border);
+  padding-left: 0.9rem;
+  color: var(--color-muted);
+  margin: 0.8rem 0;
+}
+
+/* ====== TABLES ====== */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.8rem 0 1rem;
+  font-size: 10.5pt;
+}
+thead th {
+  background: #f2f2f2;
+  border-bottom: 1px solid var(--color-border);
+  font-weight: 600;
+  text-align: left;
+  padding: 6px 8px;
+}
+tbody td, tbody th {
+  border-top: 1px solid var(--color-border);
+  padding: 6px 8px;
+}
+tbody tr:nth-child(even) { background: #fafafa; }
+
+/* ====== FIGURES / IMAGES / DIAGRAMMI ====== */
+figure, img, svg, canvas, pre {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+/* Previeni che immagini e diagrammi vengano tagliati */
+img, svg, canvas {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+  margin: 1rem auto;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Diagrammi Mermaid e simili */
+pre.mermaid, .mermaid {
+  max-width: 100% !important;
+  overflow: visible !important;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Scala diagrammi grandi per farli stare nella pagina */
+img[src*="mermaid"], 
+img[src*="diagram"],
+svg.diagram {
+  max-width: 100% !important;
+  max-height: 240mm !important; /* Altezza massima per A4 con margini */
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain;
+}
+
+figure {
+  margin: 1rem 0;
+  text-align: center;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+figcaption {
+  font-size: 9.5pt;
+  color: var(--color-muted);
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* ====== CODE ====== */
+pre {
+  background: var(--bg-code);
+  border: 1px solid #e4e4e4;
+  border-radius: 4px;
+  padding: 10px 12px;
+  margin: 0.6rem 0;
+  overflow: auto;
+  page-break-inside: avoid;
+  break-inside: avoid;
+  max-width: 100%;
+  /* Permetti wrapping del testo nei code block per evitare overflow */
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+code {
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+}
+:not(pre) > code {
+  background: #efefef;
+  border: 1px solid #e2e2e2;
+  padding: 1px 4px;
+  border-radius: 3px;
+  color: #7a1a3a;
+}
+
+/* ====== PAGE CONTROL ====== */
+.page-break { break-before: page; page-break-before: always; }
+
+/* Keep-together utility: evita tagli di schemi e blocchi */
+.keep-together { break-inside: avoid; page-break-inside: avoid; }
+
+/* ====== SECTIONS for PATENT STRUCTURE ====== */
+section.abstract, section.claims, section.description {
+  margin-top: 1.2rem;
+}
+section.abstract > h2::after {
+  content: " – Abstract";
+  font-weight: 400;
+  color: var(--color-muted);
+}
+section.claims > h2::after {
+  content: " – Rivendicazioni";
+  font-weight: 400;
+  color: var(--color-muted);
+}
+section.description > h2::after {
+  content: " – Descrizione";
+  font-weight: 400;
+  color: var(--color-muted);
+}
+
+/* ====== PRINT ADJUSTMENTS ====== */
+@media print {
+  body { margin: var(--margin-top) var(--margin-side) var(--margin-bottom); }
+  a { color: inherit; text-decoration: none; }
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: var(--color-muted);
+  }
+}
