@@ -1,0 +1,60 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [ "main" ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js 18.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18.x
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build project
+      run: npm run build
+
+    - name: Package executables
+      run: npx pkg .
+
+    - name: Rename binaries
+      run: |
+        cd output
+        mv md2pdf-linux md2pdf-linux-x64
+        chmod +x md2pdf-linux-x64
+        mv md2pdf-macos md2pdf-macos-x64
+        chmod +x md2pdf-macos-x64
+        mv md2pdf-win.exe md2pdf-windows-x64.exe  
+      
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: md2pdf-executables
+        path: output/
+
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          output/md2pdf-windows-x64.exe
+          output/md2pdf-linux-x64
+          output/md2pdf-macos-x64
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
