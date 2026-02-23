@@ -6,8 +6,17 @@
   "bin": {
     "md2pdf": "./dist/index.js"
   },
+  "pkg": {
+    "scripts": "dist/**/*.js",
+    "assets": "dist/styles/*.css",
+    "targets": [
+      "node18-win-x64"
+    ],
+    "outputPath": "output"
+  },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && copyfiles -u 1 src/styles/*.css dist/",
+    "package": "npm run build && pkg .",
     "dev": "tsc --watch",
     "start": "node dist/index.js",
     "test": "node dist/index.js example.md"
@@ -30,6 +39,8 @@
   },
   "devDependencies": {
     "@types/node": "^20.10.5",
+    "copyfiles": "^2.4.1",
+    "pkg": "^5.8.1",
     "typescript": "^5.3.3"
   }
 }

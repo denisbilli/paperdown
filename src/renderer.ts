@@ -29,13 +29,48 @@
  * External CSS does not apply to header/footer content.
  */
 
-import puppeteer from 'puppeteer';
+import puppeteer, { Browser } from 'puppeteer';
 import * as fs from 'fs';
+import * as os from 'os';
 
 interface RenderOptions {
   documentTitle?: string;
   headerText?: string;
   footerText?: string;
+}
+
+/**
+ * Tries to locate a Chrome/Chromium executable on the system
+ */
+function findSystemChrome(): string | undefined {
+  const platform = os.platform();
+  const paths: string[] = [];
+
+  if (platform === 'win32') {
+    paths.push(
+      'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+      'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+      'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
+      'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
+    );
+    if (process.env.LOCALAPPDATA) {
+      paths.push(`${process.env.LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe`);
+    }
+  } else if (platform === 'darwin') {
+    paths.push(
+      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+      '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge'
+    );
+  } else if (platform === 'linux') {
+    paths.push(
+      '/usr/bin/google-chrome',
+      '/usr/bin/google-chrome-stable',
+      '/usr/bin/chromium',
+      '/usr/bin/chromium-browser'
+    );
+  }
+
+  return paths.find(path => fs.existsSync(path));
 }
 
 /**
@@ -59,12 +94,43 @@ export async function renderPDF(
   outputPath: string,
   options: RenderOptions = {}
 ): Promise<void> {
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  });
-
+  let browser: Browser | null = null;
+  
   try {
+    try {
+      // First attempt: try default launch (bundled Chromium)
+      browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      });
+    } catch (launchError: any) {
+      // Check if error is related to missing executable
+      if (launchError.message.includes('Could not find Chromium') || 
+          launchError.message.includes('Could not find browser revision')) {
+        
+        console.warn('⚠️  Bundled Chromium not found. Trying system browser...');
+        
+        const systemChromePath = findSystemChrome();
+        
+        if (systemChromePath) {
+          console.log(`✅ Found system browser at: ${systemChromePath}`);
+          browser = await puppeteer.launch({
+            headless: true,
+            executablePath: systemChromePath,
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+          });
+        } else {
+          throw new Error(
+            '❌ Chromium/Chrome not found! Please install Google Chrome or set PUPPETEER_EXECUTABLE_PATH environment variable.'
+          );
+        }
+      } else {
+        throw launchError;
+      }
+    }
+
+    if (!browser) throw new Error('Failed to initialize browser');
+
     const page = await browser.newPage();
 
     // Set content with a base URL to resolve relative paths
@@ -143,6 +209,8 @@ export async function renderPDF(
   } catch (error) {
     throw new Error(`Failed to render PDF: ${error}`);
   } finally {
-    await browser.close();
+    if (browser) {
+      await browser.close();
+    }
   }
 }
