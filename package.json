@@ -19,7 +19,7 @@
     "package": "npm run build && pkg .",
     "dev": "tsc --watch",
     "start": "node dist/index.js",
-    "test": "node dist/index.js example.md"
+    "test": "node dist/index.js examples/example.md"
   },
   "keywords": [
     "markdown",
