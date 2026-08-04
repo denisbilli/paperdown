@@ -29,7 +29,7 @@
  * External CSS does not apply to header/footer content.
  */
 
-import puppeteer, { Browser } from 'puppeteer';
+import puppeteer, { Browser } from 'puppeteer-core';
 import * as fs from 'fs';
 import * as os from 'os';
 
@@ -37,6 +37,21 @@ interface RenderOptions {
   documentTitle?: string;
   headerText?: string;
   footerText?: string;
+}
+
+/**
+ * Resolves the browser to drive.
+ *
+ * puppeteer-core does not download Chromium and, unlike puppeteer, does not read
+ * PUPPETEER_EXECUTABLE_PATH on its own: both are handled here. An explicit path
+ * always wins, so users can point at any Chromium build they like.
+ */
+function resolveBrowserPath(): string | undefined {
+  const fromEnv = process.env.PUPPETEER_EXECUTABLE_PATH;
+  if (fromEnv && fs.existsSync(fromEnv)) {
+    return fromEnv;
+  }
+  return findSystemChrome();
 }
 
 /**
@@ -97,37 +112,20 @@ export async function renderPDF(
   let browser: Browser | null = null;
   
   try {
-    try {
-      // First attempt: try default launch (bundled Chromium)
-      browser = await puppeteer.launch({
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      });
-    } catch (launchError: any) {
-      // Check if error is related to missing executable
-      if (launchError.message.includes('Could not find Chromium') || 
-          launchError.message.includes('Could not find browser revision')) {
-        
-        console.warn('⚠️  Bundled Chromium not found. Trying system browser...');
-        
-        const systemChromePath = findSystemChrome();
-        
-        if (systemChromePath) {
-          console.log(`✅ Found system browser at: ${systemChromePath}`);
-          browser = await puppeteer.launch({
-            headless: true,
-            executablePath: systemChromePath,
-            args: ['--no-sandbox', '--disable-setuid-sandbox'],
-          });
-        } else {
-          throw new Error(
-            '❌ Chromium/Chrome not found! Please install Google Chrome or set PUPPETEER_EXECUTABLE_PATH environment variable.'
-          );
-        }
-      } else {
-        throw launchError;
-      }
+    const browserPath = resolveBrowserPath();
+
+    if (!browserPath) {
+      throw new Error(
+        'No Chrome, Edge or Chromium found. Install one of them, or point ' +
+        'PUPPETEER_EXECUTABLE_PATH at an existing browser executable.'
+      );
     }
+
+    browser = await puppeteer.launch({
+      headless: true,
+      executablePath: browserPath,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
 
     if (!browser) throw new Error('Failed to initialize browser');
 

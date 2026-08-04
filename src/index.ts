@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 /**
- * md2pdf - Professional Markdown to PDF Converter
+ * paperdown - Professional Markdown to PDF Converter
  * 
  * Main CLI entry point that handles command-line arguments and orchestrates
  * the conversion pipeline: Markdown → HTML → PDF
  * 
  * Usage:
- *   md2pdf input.md
- *   md2pdf input.md --css custom.css --title "My Document"
+ *   paperdown input.md
+ *   paperdown input.md --css custom.css --title "My Document"
  */
 
 import { Command } from 'commander';
@@ -29,7 +29,7 @@ async function main() {
   const program = new Command();
 
   program
-    .name('md2pdf')
+    .name('paperdown')
     .description('Convert Markdown files to professionally styled PDFs')
     .version('1.0.0')
     .argument('<input>', 'Input Markdown file (.md)')

@@ -1,10 +1,10 @@
 # Technical Documentation Example
 
-This document demonstrates all the features of the **md2pdf** converter, including typography, code blocks, tables, images, and page break controls.
+This document demonstrates all the features of the **paperdown** converter, including typography, code blocks, tables, images, and page break controls.
 
 ## Introduction
 
-The md2pdf tool converts Markdown files into professionally styled PDF documents with:
+The paperdown tool converts Markdown files into professionally styled PDF documents with:
 
 - **Consistent typography** using Barlow and Fira Code fonts
 - **Syntax-highlighted code blocks** for multiple languages
@@ -139,11 +139,11 @@ manager.addUser({ id: 1, name: "Alice", email: "alice@example.com", roles: ["adm
 
 | Command | Description | Example | Result |
 |:--------|:------------|--------:|:------:|
-| `md2pdf` | Basic conversion | `md2pdf doc.md` | ✅ |
-| `--css` | Custom styles | `md2pdf doc.md --css custom.css` | 🎨 |
-| `--title` | Override title | `md2pdf doc.md --title "Report"` | 📄 |
-| `--header` | Custom header | `md2pdf doc.md --header "Confidential"` | 🔒 |
-| `--footer` | Custom footer | `md2pdf doc.md --footer "Draft v1.0"` | 📝 |
+| `paperdown` | Basic conversion | `paperdown doc.md` | ✅ |
+| `--css` | Custom styles | `paperdown doc.md --css custom.css` | 🎨 |
+| `--title` | Override title | `paperdown doc.md --title "Report"` | 📄 |
+| `--header` | Custom header | `paperdown doc.md --header "Confidential"` | 🔒 |
+| `--footer` | Custom footer | `paperdown doc.md --footer "Draft v1.0"` | 📝 |
 
 ## Blockquotes
 
@@ -191,7 +191,7 @@ The previous `<div class="page-break"></div>` forces a page break before this se
 
 2. **Run the converter**
    ```bash
-   md2pdf example.md
+   paperdown example.md
    ```
 
 3. **Check the output**
@@ -244,7 +244,7 @@ code {
 Then use it:
 
 ```bash
-md2pdf document.md --css custom.css
+paperdown document.md --css custom.css
 ```
 
 ### Custom Header/Footer
@@ -252,12 +252,12 @@ md2pdf document.md --css custom.css
 Override the default header and footer:
 
 ```bash
-md2pdf report.md --header "Confidential - Internal Use Only" --footer "Company Name"
+paperdown report.md --header "Confidential - Internal Use Only" --footer "Company Name"
 ```
 
 ## Conclusion
 
-This example demonstrates all major features of the md2pdf converter. The tool handles:
+This example demonstrates all major features of the paperdown converter. The tool handles:
 
 ✅ Rich typography and formatting  
 ✅ Syntax-highlighted code in multiple languages  

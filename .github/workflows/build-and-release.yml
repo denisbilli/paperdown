@@ -36,16 +36,16 @@ jobs:
     - name: Rename binaries
       run: |
         cd output
-        mv md2pdf-linux md2pdf-linux-x64
-        chmod +x md2pdf-linux-x64
-        mv md2pdf-macos md2pdf-macos-x64
-        chmod +x md2pdf-macos-x64
-        mv md2pdf-win.exe md2pdf-windows-x64.exe  
+        mv paperdown-linux paperdown-linux-x64
+        chmod +x paperdown-linux-x64
+        mv paperdown-macos paperdown-macos-x64
+        chmod +x paperdown-macos-x64
+        mv paperdown-win.exe paperdown-windows-x64.exe  
       
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: md2pdf-executables
+        name: paperdown-executables
         path: output/
 
     - name: Create Release
@@ -53,8 +53,8 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          output/md2pdf-windows-x64.exe
-          output/md2pdf-linux-x64
-          output/md2pdf-macos-x64
+          output/paperdown-windows-x64.exe
+          output/paperdown-linux-x64
+          output/paperdown-macos-x64
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

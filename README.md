@@ -1,4 +1,4 @@
-# md2pdf - Professional Markdown to PDF Converter
+# paperdown - Professional Markdown to PDF Converter
 
 A powerful CLI tool that converts Markdown files into professionally styled PDF documents with WYSIWYG rendering using Puppeteer.
 
@@ -16,15 +16,42 @@ A powerful CLI tool that converts Markdown files into professionally styled PDF 
 
 ## 📦 Installation
 
-### Prerequisites
-
-- Node.js 18 or higher
-- npm or yarn
-- Google Chrome or Chromium (if using the standalone executable, it uses the system browser if bundled one is missing)
-
-### Install Dependencies
+### From npm
 
 ```bash
+npm install -g paperdown
+paperdown document.md
+```
+
+### Standalone executable
+
+Grab the binary for your platform from the
+[latest release](https://github.com/denisbilli/MDtoPDF/releases/latest) — no
+Node.js required.
+
+### Prerequisites
+
+- **A Chromium-based browser**: Chrome, Edge or Chromium. paperdown drives the
+  browser already installed on your machine instead of downloading its own copy,
+  so installing it stays small and fast. On Windows, Edge ships with the system
+  and is picked up automatically.
+- Node.js 18 or higher, only when installing from npm or building from source.
+
+If your browser lives somewhere unusual, point paperdown at it:
+
+```bash
+# Linux / macOS
+export PUPPETEER_EXECUTABLE_PATH=/opt/chromium/chrome
+
+# Windows (PowerShell)
+$env:PUPPETEER_EXECUTABLE_PATH = "D:\Chromium\chrome.exe"
+```
+
+### From source
+
+```bash
+git clone https://github.com/denisbilli/MDtoPDF.git
+cd MDtoPDF
 npm install
 ```
 
@@ -46,9 +73,11 @@ You can package the application into a single executable file:
 npm run package
 ```
 
-The executable will be created in the `output/` directory (e.g., `output/md2pdf.exe`).
+The executable will be created in the `output/` directory (e.g., `output/paperdown.exe`).
 
-**Note:** The executable does not bundle Chromium to keep the file size small. It will attempt to use your installed Google Chrome or Edge browser.
+**Note:** neither the executable nor the npm package bundles Chromium, which
+keeps both small. paperdown uses the Chrome, Edge or Chromium already installed
+on your machine.
 
 ## 🚀 Usage
 
@@ -66,17 +95,17 @@ npm start -- input.md --css styles/custom.css --title "My Document"
 
 ```bash
 # Windows
-.\output\md2pdf.exe input.md
+.\output\paperdown.exe input.md
 
 # With options
-.\output\md2pdf.exe input.md --header "Confidential" --footer "Company Name"
+.\output\paperdown.exe input.md --header "Confidential" --footer "Company Name"
 ```
 
 ### Command Line Options
 
 | Option | Description | Example |
 |--------|-------------|---------|
-| `input.md` | Input Markdown file (required) | `md2pdf doc.md` |
+| `input.md` | Input Markdown file (required) | `paperdown doc.md` |
 | `--css` | Path to custom CSS file | `--css style.css` |
 | `--title` | Document title (overrides H1) | `--title "Report"` |
 | `--header` | Custom header text | `--header "Draft"` |

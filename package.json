@@ -1,11 +1,28 @@
 {
-  "name": "md2pdf",
+  "name": "paperdown",
   "version": "1.0.0",
-  "description": "Professional Markdown to PDF converter with WYSIWYG rendering",
+  "description": "Markdown to PDF on the command line, with real typography: Barlow and Fira Code, syntax highlighting, smart page breaks and page numbers.",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
-    "md2pdf": "./dist/index.js"
+    "paperdown": "./dist/index.js"
   },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/denisbilli/MDtoPDF.git"
+  },
+  "bugs": {
+    "url": "https://github.com/denisbilli/MDtoPDF/issues"
+  },
+  "homepage": "https://github.com/denisbilli/MDtoPDF#readme",
   "pkg": {
     "scripts": "dist/**/*.js",
     "assets": "dist/styles/*.css",
@@ -18,6 +35,7 @@
   },
   "scripts": {
     "build": "tsc && copyfiles -u 1 src/styles/*.css dist/",
+    "prepare": "npm run build",
     "package": "npm run build && pkg .",
     "dev": "tsc --watch",
     "start": "node dist/index.js",
@@ -26,18 +44,23 @@
   "keywords": [
     "markdown",
     "pdf",
+    "markdown-to-pdf",
+    "md-to-pdf",
     "converter",
+    "typography",
+    "syntax-highlighting",
     "puppeteer",
-    "cli"
+    "cli",
+    "documentation"
   ],
-  "author": "",
+  "author": "Denis Billi",
   "license": "MIT",
   "dependencies": {
     "commander": "^11.1.0",
     "highlight.js": "^11.9.0",
     "marked": "^11.1.0",
     "marked-highlight": "^2.1.0",
-    "puppeteer": "^24.15.0"
+    "puppeteer-core": "^24.15.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.5",
