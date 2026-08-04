@@ -26,7 +26,7 @@ paperdown document.md
 ### Standalone executable
 
 Grab the binary for your platform from the
-[latest release](https://github.com/denisbilli/MDtoPDF/releases/latest) — no
+[latest release](https://github.com/denisbilli/paperdown/releases/latest) — no
 Node.js required.
 
 ### Prerequisites
@@ -50,8 +50,8 @@ $env:PUPPETEER_EXECUTABLE_PATH = "D:\Chromium\chrome.exe"
 ### From source
 
 ```bash
-git clone https://github.com/denisbilli/MDtoPDF.git
-cd MDtoPDF
+git clone https://github.com/denisbilli/paperdown.git
+cd paperdown
 npm install
 ```
 

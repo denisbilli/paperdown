@@ -17,12 +17,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/denisbilli/MDtoPDF.git"
+    "url": "git+https://github.com/denisbilli/paperdown.git"
   },
   "bugs": {
-    "url": "https://github.com/denisbilli/MDtoPDF/issues"
+    "url": "https://github.com/denisbilli/paperdown/issues"
   },
-  "homepage": "https://github.com/denisbilli/MDtoPDF#readme",
+  "homepage": "https://github.com/denisbilli/paperdown#readme",
   "pkg": {
     "scripts": "dist/**/*.js",
     "assets": "dist/styles/*.css",
