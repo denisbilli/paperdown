@@ -18,6 +18,12 @@ import { parseMarkdown } from './parser';
 import { generateHTML } from './template';
 import { renderPDF } from './renderer';
 
+// The version comes from the manifest rather than a literal: a hardcoded string
+// silently drifts from the published package the first time a release is cut.
+const pkgVersion: string = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8')
+).version;
+
 interface CliOptions {
   css?: string;
   header?: string;
@@ -31,7 +37,7 @@ async function main() {
   program
     .name('paperdown')
     .description('Convert Markdown files to professionally styled PDFs')
-    .version('1.0.0')
+    .version(pkgVersion)
     .argument('<input>', 'Input Markdown file (.md)')
     .option('--css <path>', 'Custom CSS file to override default styles')
     .option('--header <text>', 'Custom header text')

@@ -1,0 +1,93 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    permissions:
+      # npm provenance: the workflow proves to the registry that this tarball was
+      # built from this commit in this repository, so the package can be verified
+      # rather than merely trusted — and the token never touches a laptop.
+      id-token: write
+      # Needed to create the release that carries the notes and the binaries.
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history, so the release notes can be generated from the commits
+          # since the previous tag.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://registry.npmjs.org
+
+      # npm's OIDC exchange with the registry landed in npm 11.5.1, and the npm
+      # bundled with Node 22 is older. Without this the publish below finds no
+      # credentials at all.
+      - run: npm install -g npm@latest
+
+      - run: npm ci
+
+      # The tag and the manifest must agree. A tag that says v1.1.0 while
+      # package.json says 1.0.0 publishes the wrong version under the right name,
+      # and npm will not let that version number be reused afterwards.
+      - name: Check the tag matches the version
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME#v}"
+          manifest="$(node -p "require('./package.json').version")"
+          if [ "$tag" != "$manifest" ]; then
+            echo "::error::Tag is v$tag but package.json says $manifest."
+            exit 1
+          fi
+          echo "Publishing version $manifest"
+
+      - run: npm run build
+
+      - uses: browser-actions/setup-chrome@v1
+        id: chrome
+        with:
+          chrome-version: stable
+
+      - name: Convert the example document
+        env:
+          PUPPETEER_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          set -euo pipefail
+          npm test
+          test -s examples/example.pdf
+
+      # No NODE_AUTH_TOKEN: the trusted publisher connection on npm lets this exact
+      # workflow, in this exact repository, mint a short-lived credential over OIDC.
+      # A token in the environment would be used in preference to that exchange, so
+      # its absence is what makes the publish take the trusted path.
+      - name: Publish to npm
+        run: npm publish --access public --provenance
+
+      # The standalone binaries stay a GitHub release artifact: they are for people
+      # who do not want Node at all, and they have no business in the npm tarball.
+      - name: Package the standalone binaries
+        run: |
+          set -euo pipefail
+          npx pkg .
+          cd output
+          mv paperdown-linux paperdown-linux-x64 && chmod +x paperdown-linux-x64
+          mv paperdown-macos paperdown-macos-x64 && chmod +x paperdown-macos-x64
+          mv paperdown-win.exe paperdown-windows-x64.exe
+
+      - name: Create the GitHub release
+        run: |
+          gh release create "$GITHUB_REF_NAME" --generate-notes --verify-tag \
+            output/paperdown-linux-x64 \
+            output/paperdown-macos-x64 \
+            output/paperdown-windows-x64.exe
+        env:
+          GH_TOKEN: ${{ github.token }}

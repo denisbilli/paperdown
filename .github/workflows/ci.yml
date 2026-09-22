@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # The lower bound is what package.json's engines field promises; the upper
+        # bound is what the release workflow publishes from. If the CLI only works
+        # on one of them, the promise is wrong.
+        node: [18, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+
+      # paperdown drives a real browser: without one the only thing that can be
+      # checked is that the binary starts. The runner image ships Chrome, but
+      # pinning it here keeps the test from depending on image contents.
+      - uses: browser-actions/setup-chrome@v1
+        id: chrome
+        with:
+          chrome-version: stable
+
+      - name: Convert the example document
+        env:
+          PUPPETEER_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          set -euo pipefail
+          npm test
+          test -s examples/example.pdf
+          echo "PDF produced: $(wc -c < examples/example.pdf) bytes"
