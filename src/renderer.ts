@@ -132,9 +132,10 @@ export async function renderPDF(
     const page = await browser.newPage();
 
     // Set content with a base URL to resolve relative paths
-    await page.setContent(htmlContent, {
-      waitUntil: 'networkidle0', // Wait for all resources to load
-    });
+    // 'load' waits for images and stylesheets; web fonts can still be arriving after it,
+    // so wait for them too before printing. (Puppeteer 25 dropped networkidle0 here.)
+    await page.setContent(htmlContent, { waitUntil: 'load' });
+    await page.evaluate(() => document.fonts.ready);
 
     // Extract document title from content if not provided
     let documentTitle = options.documentTitle;

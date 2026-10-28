@@ -13,7 +13,7 @@ jobs:
         # The lower bound is what package.json's engines field promises; the upper
         # bound is what the release workflow publishes from. If the CLI only works
         # on one of them, the promise is wrong.
-        node: [18, 22]
+        node: ['22.12', 22]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
