@@ -35,7 +35,7 @@ Node.js required.
   browser already installed on your machine instead of downloading its own copy,
   so installing it stays small and fast. On Windows, Edge ships with the system
   and is picked up automatically.
-- Node.js 18 or higher, only when installing from npm or building from source.
+- Node.js 22.12 or higher, only when installing from npm or building from source.
 
 If your browser lives somewhere unusual, point paperdown at it:
 
